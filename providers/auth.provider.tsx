@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { refresh } from "@/services/auth.service";
+import { refreshToken } from "@/services/auth.service";
 import { useAuthStore } from "@/store/auth.store";
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
@@ -11,7 +11,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const bootstrap = async () => {
       try {
-        const { accessToken, user } = await refresh();
+        const { accessToken, user } = await refreshToken();
 
         setAuth({
           user: user,

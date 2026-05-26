@@ -1,12 +1,8 @@
-
 import api from "@/lib/axios/axios";
-import { CurrentUser } from "@/store/auth.store";
+import { RefreshTokenResponse } from "@/lib/constants/constants";
 
-export const refresh = async (): Promise<{
-  user: CurrentUser;
-  accessToken: string;
-}> => {
-  const { data } = await api.post<{ user: CurrentUser; accessToken: string }>(
+export const refreshToken = async (): Promise<RefreshTokenResponse> => {
+  const { data } = await api.post<RefreshTokenResponse>(
     "/auth/refresh",
     {},
     { public: true },

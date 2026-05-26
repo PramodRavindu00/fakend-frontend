@@ -1,8 +1,7 @@
+import { CurrentUser } from "@/lib/constants/constants";
 import { create } from "zustand";
 
-export interface CurrentUser {
-  id: string;
-}
+
 
 interface AuthState {
   status: "loading" | "guest" | "authenticated";

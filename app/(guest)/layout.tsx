@@ -1,5 +1,10 @@
-const GuestLayout = () => {
-  return <div>layout</div>;
+const GuestLayout = ({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) => {
+  return <>
+  {children}</>;
 };
 
 export default GuestLayout;

@@ -1,7 +1,9 @@
-const AuthenticatedLayout = () => {
-  return (
-    <div>layout</div>
-  )
-}
+const AuthenticatedLayout = ({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) => {
+  return <>{children}</>;
+};
 
-export default AuthenticatedLayout
+export default AuthenticatedLayout;
