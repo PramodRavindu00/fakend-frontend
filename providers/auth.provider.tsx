@@ -2,11 +2,11 @@
 
 import { useEffect } from "react";
 import { refresh } from "@/services/auth.service";
-import { useAuthStore } from "@/stores/auth.store";
+import { useAuthStore } from "@/store/auth.store";
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const setAuth = useAuthStore((state) => state.setAuth);
-  const logout = useAuthStore((state) => state.logout);
+  const clearAuth = useAuthStore((state) => state.clearAuth);
 
   useEffect(() => {
     const bootstrap = async () => {
@@ -18,12 +18,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           accessToken: accessToken,
         });
       } catch {
-        logout();
+        clearAuth();
       }
     };
 
     bootstrap();
-  }, [setAuth, logout]);
+  }, [setAuth, clearAuth]);
 
   return children;
 };

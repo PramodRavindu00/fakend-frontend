@@ -1,7 +1,7 @@
 import "axios";
 import { refresh } from "@/services/auth.service";
 import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
-import { useAuthStore } from "@/stores/auth.store";
+import { useAuthStore } from "@/store/auth.store";
 
 declare module "axios" {
   interface AxiosRequestConfig {
@@ -55,7 +55,7 @@ api.interceptors.response.use(
         return api(originalRequest);
       } catch (refreshError) {
         console.error("Token refresh failed:", refreshError);
-        useAuthStore.getState().logout();
+        useAuthStore.getState().clearAuth();
         window.location.href = "/login";
         return Promise.reject(refreshError);
       }

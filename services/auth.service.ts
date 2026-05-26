@@ -1,6 +1,6 @@
 
 import api from "@/lib/axios/axios";
-import { CurrentUser } from "@/stores/auth.store";
+import { CurrentUser } from "@/store/auth.store";
 
 export const refresh = async (): Promise<{
   user: CurrentUser;
