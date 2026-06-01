@@ -15,9 +15,15 @@ declare module "axios" {
 }
 
 const BASE_URL = process.env.NEXT_PUBLIC_SERVER_URL;
+const jsonHeader = {
+  "Content-Type": "application/json",
+  Accept: "application/json",
+};
+
 const api = axios.create({
   baseURL: BASE_URL,
   withCredentials: true,
+  headers: jsonHeader,
 });
 
 api.interceptors.request.use((config: InternalAxiosRequestConfig) => {
@@ -53,7 +59,11 @@ api.interceptors.response.use(
     try {
       //call the auth refresh endpoint as an standalone http request
       // not as this context's api client
-      const { data } = await axios.post<RefreshTokenResponse>(`${BASE_URL}/auth/refresh`, {}, { withCredentials: true });
+      const { data } = await axios.post<RefreshTokenResponse>(
+        `${BASE_URL}/auth/refresh`,
+        {},
+        { withCredentials: true, headers: jsonHeader },
+      );
 
       const { accessToken, user } = data;
 

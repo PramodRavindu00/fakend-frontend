@@ -1,3 +1,5 @@
+import AppBar from "@/components/custom/AppBar";
+
 const PublicLayout = ({
   children,
 }: Readonly<{
@@ -5,6 +7,7 @@ const PublicLayout = ({
 }>) => {
   return (
     <>
+    <AppBar showMarketingLinks/>
       {children}
     </>
   );
