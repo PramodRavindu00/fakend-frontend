@@ -1,10 +1,8 @@
-import { CurrentUser } from "@/lib/constants/constants";
+import { AuthStatus, CurrentUser } from "@/lib/constants/constants";
 import { create } from "zustand";
 
-
-
 interface AuthState {
-  status: "loading" | "guest" | "authenticated";
+  status: AuthStatus;
   user: CurrentUser | null;
   accessToken: string | null;
   setAuth: (data: { user: CurrentUser; accessToken: string }) => void;
@@ -13,23 +11,23 @@ interface AuthState {
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
-  status: "loading",
+  status: AuthStatus.Loading,
   user: null,
   accessToken: null,
   setAuth: ({ user, accessToken }) =>
     set({
-      status: "authenticated",
+      status: AuthStatus.Authenticated,
       user,
       accessToken,
     }),
   clearAuth: () =>
     set({
-      status: "guest",
+      status: AuthStatus.Guest,
       user: null,
       accessToken: null,
     }),
   setLoading: () =>
     set({
-      status: "loading",
+      status: AuthStatus.Loading,
     }),
 }));

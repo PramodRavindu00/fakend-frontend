@@ -11,6 +11,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const bootstrap = async () => {
       try {
+        useAuthStore.getState().setLoading();
         const { accessToken, user } = await refreshToken();
 
         setAuth({

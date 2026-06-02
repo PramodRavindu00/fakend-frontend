@@ -7,7 +7,7 @@ const PublicLayout = ({
 }>) => {
   return (
     <>
-    <AppBar showMarketingLinks/>
+    <AppBar showMarketingLinks={true}/>
       {children}
     </>
   );
