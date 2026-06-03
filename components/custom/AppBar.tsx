@@ -1,5 +1,5 @@
 "use client";
-import { cn } from "@/util/cn";
+
 import {
   NavigationMenu,
   NavigationMenuItem,
@@ -16,6 +16,11 @@ import { Skeleton } from "../ui/skeleton";
 interface AppBarProps {
   showMarketingLinks?: boolean;
 }
+
+interface AuthActionsProps {
+  authStatus: AuthStatus;
+}
+
 interface LinkItem {
   title: string;
   href: string;
@@ -33,54 +38,58 @@ const marketingLinks: LinkItem[] = [
     title: "Pricing",
     href: "/pricing",
   },
+  {
+    title: "Docs",
+    href: "/docs",
+  },
 ];
 const AppBar = ({ showMarketingLinks = false }: AppBarProps) => {
   const authStatus = useAuthStore((state) => state.status);
   return (
-    <header className={cn("w-full flex items-center py-5")}>
+    <header className="sticky top-0 z-50 flex items-center justify-between  p-5 border-b bg-background/95 backdrop-blur">
       {/* logo */}
-      <div className="hidden md:block absolute left-5">Logo</div>
-      {showMarketingLinks && (
-        <NavigationMenu className="flex mx-auto">
-          <NavigationMenuList>
-            {marketingLinks.map((link: LinkItem) => (
-              <NavigationMenuItem key={link.href} className="px-2">
-                <NavigationMenuLink asChild>
-                  <Link href={link.href}>{link.title}</Link>
-                </NavigationMenuLink>
-              </NavigationMenuItem>
-            ))}
-          </NavigationMenuList>
-        </NavigationMenu>
-      )}
+      <div className="hidden sm:block">Logo</div>
 
-      {/* login,profile and other actions */}
-      <div className="absolute right-5 flex justify-center items-center gap-5">
-        {authStatus === AuthStatus.Loading ? (
-          <Skeleton className="rounded-full">
-            <Avatar/>
-          </Skeleton>
-        ) : authStatus === AuthStatus.Authenticated ? (
-          <>
-            <Avatar>
-              <AvatarImage src="https://github.com/shadcn.png" />
-              <AvatarFallback>AU</AvatarFallback>
-            </Avatar>
-          </>
-        ) : (
-          <>
-            <Link href="/login">
-              <Button>Login</Button>
-            </Link>
-            <Avatar>
-              <AvatarImage src="https://github.com/shadcn.png" />
-              <AvatarFallback>GU</AvatarFallback>
-            </Avatar>
-          </>
-        )}
-      </div>
+      {/* marketing links */}
+      {showMarketingLinks && <MarketingNavigation />}
+
+      {/* auth actions */}
+      <AuthActions authStatus={authStatus} />
     </header>
   );
 };
 
 export default AppBar;
+
+const MarketingNavigation = () => (
+  <NavigationMenu>
+    <NavigationMenuList className="flex space-x-5">
+      {marketingLinks.map((link) => (
+        <NavigationMenuItem key={link.href}>
+          <NavigationMenuLink asChild>
+            <Link href={link.href}>{link.title}</Link>
+          </NavigationMenuLink>
+        </NavigationMenuItem>
+      ))}
+    </NavigationMenuList>
+  </NavigationMenu>
+);
+
+const AuthActions = ({ authStatus }: AuthActionsProps) => (
+  <div>
+    {authStatus === AuthStatus.Loading ? (
+      <Skeleton />
+    ) : authStatus === AuthStatus.Authenticated ? (
+      <Avatar>
+        <AvatarImage src="https://github.com/shadcn.png" />
+        <AvatarFallback>AU</AvatarFallback>
+      </Avatar>
+    ) : (
+      <Link href="/login">
+        <Button size="lg" variant="outline">
+          Login
+        </Button>
+      </Link>
+    )}
+  </div>
+);
