@@ -15,7 +15,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="min-h-full flex flex-col">
+      <body className="min-h-full w-full flex flex-col overflow-x-hidden">
         <QueryProvider>
           <AuthProvider>
             {children}

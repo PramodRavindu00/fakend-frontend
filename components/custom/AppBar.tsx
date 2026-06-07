@@ -12,6 +12,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { useAuthStore } from "@/store/auth.store";
 import { AuthStatus } from "@/lib/constants/constants";
 import { Skeleton } from "../ui/skeleton";
+import { Menu } from "lucide-react";
 
 interface AppBarProps {
   showMarketingLinks?: boolean;
@@ -49,12 +50,14 @@ const AppBar = ({ showMarketingLinks = false }: AppBarProps) => {
     <header className="sticky top-0 z-50 flex items-center justify-between  p-5 border-b bg-background/95 backdrop-blur">
       {/* logo */}
       <div className="hidden sm:block">Logo</div>
+      <Button variant="ghost" className="sm:hidden p-0"><Menu/></Button>
 
       {/* marketing links */}
       {showMarketingLinks && <MarketingNavigation />}
 
       {/* auth actions */}
       <AuthActions authStatus={authStatus} />
+ 
     </header>
   );
 };
@@ -62,7 +65,7 @@ const AppBar = ({ showMarketingLinks = false }: AppBarProps) => {
 export default AppBar;
 
 const MarketingNavigation = () => (
-  <NavigationMenu>
+  <NavigationMenu className="hidden sm:flex">
     <NavigationMenuList className="flex space-x-5">
       {marketingLinks.map((link) => (
         <NavigationMenuItem key={link.href}>
