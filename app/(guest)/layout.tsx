@@ -7,7 +7,7 @@ const GuestLayout = ({
 }>) => {
   return (
     <>
-      <AppBar showMarketingLinks={true} />
+      <AppBar/>
       {children}
     </>
   );

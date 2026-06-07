@@ -7,7 +7,7 @@ const AuthenticatedLayout = ({
 }>) => {
   return (
     <>
-      <AppBar showMarketingLinks={false} />
+      <AppBar/>
       {children}
     </>
   );

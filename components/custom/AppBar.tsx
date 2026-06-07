@@ -10,54 +10,48 @@ import Link from "next/link";
 import { Button } from "../ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { useAuthStore } from "@/store/auth.store";
-import { AuthStatus } from "@/lib/constants/constants";
+import {
+  authenticatedLinks,
+  AuthStatus,
+  LinkItem,
+  marketingLinks,
+} from "@/lib/constants/constants";
 import { Skeleton } from "../ui/skeleton";
 import { Menu } from "lucide-react";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "../ui/sheet";
+import { useState } from "react";
 
-interface AppBarProps {
-  showMarketingLinks?: boolean;
-}
-
-interface AuthActionsProps {
+interface AuthStatusProps {
   authStatus: AuthStatus;
 }
 
-interface LinkItem {
-  title: string;
-  href: string;
+interface MobileNavigationProps {
+  links: LinkItem[];
 }
-const marketingLinks: LinkItem[] = [
-  {
-    title: "Home",
-    href: "/",
-  },
-  {
-    title: "About",
-    href: "/about",
-  },
-  {
-    title: "Pricing",
-    href: "/pricing",
-  },
-  {
-    title: "Docs",
-    href: "/docs",
-  },
-];
-const AppBar = ({ showMarketingLinks = false }: AppBarProps) => {
+
+const AppBar = () => {
   const authStatus = useAuthStore((state) => state.status);
+  const mobileLinks: LinkItem[] =
+    authStatus === AuthStatus.Authenticated
+      ? [...authenticatedLinks]
+      : [...marketingLinks];
+
   return (
     <header className="sticky top-0 z-50 flex items-center justify-between  p-5 border-b bg-background/95 backdrop-blur">
       {/* logo */}
       <div className="hidden sm:block">Logo</div>
-      <Button variant="ghost" className="sm:hidden p-0"><Menu/></Button>
-
+      <MobileNavigation links={mobileLinks} />
       {/* marketing links */}
-      {showMarketingLinks && <MarketingNavigation />}
-
+      {authStatus !== AuthStatus.Authenticated && <MarketingNavigation />}
       {/* auth actions */}
       <AuthActions authStatus={authStatus} />
- 
     </header>
   );
 };
@@ -78,7 +72,7 @@ const MarketingNavigation = () => (
   </NavigationMenu>
 );
 
-const AuthActions = ({ authStatus }: AuthActionsProps) => (
+const AuthActions = ({ authStatus }: AuthStatusProps) => (
   <div>
     {authStatus === AuthStatus.Loading ? (
       <Skeleton />
@@ -89,10 +83,46 @@ const AuthActions = ({ authStatus }: AuthActionsProps) => (
       </Avatar>
     ) : (
       <Link href="/login">
-        <Button size="lg" variant="outline">
-          Login
-        </Button>
+        <Button variant="outline">Login</Button>
       </Link>
     )}
   </div>
 );
+
+const MobileNavigation = ({ links }: MobileNavigationProps) => {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <Sheet open={open} onOpenChange={setOpen}>
+      <SheetTrigger asChild>
+        <Button variant="ghost" className="sm:hidden p-0">
+          <Menu />
+        </Button>
+      </SheetTrigger>
+      <SheetContent
+        side="left"
+        className="flex flex-col items-center gap-5 p-5"
+      >
+        <SheetHeader>
+          <div>Logo</div>
+          <SheetTitle className="sr-only">Main Navigation</SheetTitle>
+          <SheetDescription className="sr-only">
+            Navigate to main sections of the application
+          </SheetDescription>
+        </SheetHeader>
+
+        <div className="flex flex-col items-center gap-2">
+          {links.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              onClick={() => setOpen(false)}
+            >
+              {link.title}
+            </Link>
+          ))}
+        </div>
+      </SheetContent>
+    </Sheet>
+  );
+};
