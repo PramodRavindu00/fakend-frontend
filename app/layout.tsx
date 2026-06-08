@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { AuthProvider } from "@/providers/auth.provider";
-import { QueryProvider } from "@/providers/queryClient.provider";
+import { AuthProvider } from "@/providers/AuthProvider";
+import { QueryProvider } from "@/providers/QueryClientProvider";
+import AppThemeProvider from "@/providers/ThemeProvider";
 
 export const metadata: Metadata = {
   title: "Fakend",
@@ -14,13 +15,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className="min-h-full w-full flex flex-col overflow-x-hidden">
-        <QueryProvider>
-          <AuthProvider>
-            {children}
-          </AuthProvider>
-        </QueryProvider>
+        <AppThemeProvider>
+          <QueryProvider>
+            <AuthProvider>{children}</AuthProvider>
+          </QueryProvider>
+        </AppThemeProvider>
       </body>
     </html>
   );

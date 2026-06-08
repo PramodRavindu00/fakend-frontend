@@ -17,7 +17,7 @@ import {
   marketingLinks,
 } from "@/lib/constants/constants";
 import { Skeleton } from "../ui/skeleton";
-import { Menu } from "lucide-react";
+import { Menu, Moon, Sun } from "lucide-react";
 import {
   Sheet,
   SheetContent,
@@ -26,7 +26,8 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "../ui/sheet";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useTheme } from "next-themes";
 
 interface AuthStatusProps {
   authStatus: AuthStatus;
@@ -44,19 +45,21 @@ const AppBar = () => {
       : [...marketingLinks];
 
   return (
-    <header className="sticky top-0 z-50 flex items-center justify-between  p-5 border-b bg-background/95 backdrop-blur">
+    <header className="sticky top-0 z-50 flex items-center justify-between p-5 border-b bg-background/95 backdrop-blur">
       {/* logo */}
       <div className="hidden sm:block">Logo</div>
       <MobileNavigation links={mobileLinks} />
       {/* marketing links */}
       {authStatus !== AuthStatus.Authenticated && <MarketingNavigation />}
       {/* auth actions */}
-      <AuthActions authStatus={authStatus} />
+
+      <div className="flex  gap-5 ml-auto">
+        <ThemeToggleButton />
+        <AuthActions authStatus={authStatus} />
+      </div>
     </header>
   );
 };
-
-export default AppBar;
 
 const MarketingNavigation = () => (
   <NavigationMenu className="hidden sm:flex">
@@ -73,7 +76,7 @@ const MarketingNavigation = () => (
 );
 
 const AuthActions = ({ authStatus }: AuthStatusProps) => (
-  <div>
+  <>
     {authStatus === AuthStatus.Loading ? (
       <Skeleton />
     ) : authStatus === AuthStatus.Authenticated ? (
@@ -86,7 +89,7 @@ const AuthActions = ({ authStatus }: AuthStatusProps) => (
         <Button variant="outline">Login</Button>
       </Link>
     )}
-  </div>
+  </>
 );
 
 const MobileNavigation = ({ links }: MobileNavigationProps) => {
@@ -126,3 +129,19 @@ const MobileNavigation = ({ links }: MobileNavigationProps) => {
     </Sheet>
   );
 };
+
+const ThemeToggleButton = () => {
+  const { theme, setTheme } = useTheme();
+  const isDark = theme === "dark";
+  return (
+    <Button
+      variant="outline"
+      className="rounded-full"
+      onClick={() => setTheme(isDark ? "light" : "dark")}
+    >
+      {isDark ? <Sun size={23} /> : <Moon size={23} />}
+    </Button>
+  );
+};
+
+export default AppBar;
