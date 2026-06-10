@@ -26,7 +26,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "../ui/sheet";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useTheme } from "next-themes";
 
 interface AuthStatusProps {
@@ -48,12 +48,14 @@ const AppBar = () => {
     <header className="sticky top-0 z-50 flex items-center justify-between p-5 border-b bg-background/95 backdrop-blur">
       {/* logo */}
       <div className="hidden sm:block">Logo</div>
+
       <MobileNavigation links={mobileLinks} />
       {/* marketing links */}
+
       {authStatus !== AuthStatus.Authenticated && <MarketingNavigation />}
       {/* auth actions */}
 
-      <div className="flex  gap-5 ml-auto">
+      <div className="flex gap-2">
         <ThemeToggleButton />
         <AuthActions authStatus={authStatus} />
       </div>
@@ -66,7 +68,7 @@ const MarketingNavigation = () => (
     <NavigationMenuList className="flex space-x-5">
       {marketingLinks.map((link) => (
         <NavigationMenuItem key={link.href}>
-          <NavigationMenuLink asChild>
+          <NavigationMenuLink asChild className="text-md">
             <Link href={link.href}>{link.title}</Link>
           </NavigationMenuLink>
         </NavigationMenuItem>
@@ -94,12 +96,11 @@ const AuthActions = ({ authStatus }: AuthStatusProps) => (
 
 const MobileNavigation = ({ links }: MobileNavigationProps) => {
   const [open, setOpen] = useState(false);
-
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
         <Button variant="ghost" className="sm:hidden p-0">
-          <Menu />
+          <Menu className="size-5 p-0" />
         </Button>
       </SheetTrigger>
       <SheetContent
@@ -120,6 +121,7 @@ const MobileNavigation = ({ links }: MobileNavigationProps) => {
               key={link.href}
               href={link.href}
               onClick={() => setOpen(false)}
+              className="text-md"
             >
               {link.title}
             </Link>
@@ -139,7 +141,7 @@ const ThemeToggleButton = () => {
       className="rounded-full"
       onClick={() => setTheme(isDark ? "light" : "dark")}
     >
-      {isDark ? <Sun size={23} /> : <Moon size={23} />}
+      {isDark ? <Sun size={23} color="yellow"/> : <Moon size={23} color="blue"/>}
     </Button>
   );
 };

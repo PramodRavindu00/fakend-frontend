@@ -3,11 +3,18 @@ import "./globals.css";
 import { AuthProvider } from "@/providers/AuthProvider";
 import { QueryProvider } from "@/providers/QueryClientProvider";
 import AppThemeProvider from "@/providers/ThemeProvider";
+import { Outfit } from "next/font/google";
+import { cn } from "@/util/cn";
 
 export const metadata: Metadata = {
   title: "Fakend",
   description: "Fake API Contracts Tool",
 };
+
+const fontSans = Outfit({
+  subsets: ["latin"],
+  variable: "--font-sans",
+});
 
 export default function RootLayout({
   children,
@@ -16,7 +23,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className="min-h-full w-full flex flex-col overflow-x-hidden">
+      <body
+        className={cn(
+          fontSans.variable,
+          "min-h-full w-full flex flex-col overflow-x-hidden",
+        )}
+      >
         <AppThemeProvider>
           <QueryProvider>
             <AuthProvider>{children}</AuthProvider>
