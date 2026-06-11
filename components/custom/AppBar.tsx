@@ -28,6 +28,12 @@ import {
 } from "../ui/sheet";
 import { useState } from "react";
 import { useTheme } from "next-themes";
+import {
+  DropdownMenu,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+} from "../ui/dropdown-menu";
 
 interface AuthStatusProps {
   authStatus: AuthStatus;
@@ -77,22 +83,41 @@ const MarketingNavigation = () => (
   </NavigationMenu>
 );
 
-const AuthActions = ({ authStatus }: AuthStatusProps) => (
-  <>
-    {authStatus === AuthStatus.Loading ? (
-      <Skeleton />
-    ) : authStatus === AuthStatus.Authenticated ? (
+const AuthActions = ({ authStatus }: AuthStatusProps) => {
+  if (authStatus === AuthStatus.Loading) return <Skeleton />;
+
+  if (authStatus === AuthStatus.Authenticated) {
+    return (
       <Avatar>
         <AvatarImage src="https://github.com/shadcn.png" />
         <AvatarFallback>AU</AvatarFallback>
       </Avatar>
-    ) : (
-      <Link href="/login">
+    );
+  }
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
         <Button variant="outline">Login</Button>
-      </Link>
-    )}
-  </>
-);
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="w-42">
+        <DropdownMenuItem
+          onClick={() =>
+            (window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/auth/google`)
+          }
+        >
+         Continue with Google
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          onClick={() =>
+            (window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/auth/github`)
+          }
+        >
+          Continue with GitHub
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+};
 
 const MobileNavigation = ({ links }: MobileNavigationProps) => {
   const [open, setOpen] = useState(false);
@@ -141,7 +166,11 @@ const ThemeToggleButton = () => {
       className="rounded-full"
       onClick={() => setTheme(isDark ? "light" : "dark")}
     >
-      {isDark ? <Sun size={23} color="yellow"/> : <Moon size={23} color="blue"/>}
+      {isDark ? (
+        <Sun size={23} color="yellow" />
+      ) : (
+        <Moon size={23} color="blue" />
+      )}
     </Button>
   );
 };
