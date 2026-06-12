@@ -26,7 +26,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "../ui/sheet";
-import { useState } from "react";
+import { useState, useSyncExternalStore } from "react";
 import { useTheme } from "next-themes";
 import {
   DropdownMenu,
@@ -34,6 +34,8 @@ import {
   DropdownMenuTrigger,
   DropdownMenuContent,
 } from "../ui/dropdown-menu";
+import GoogleIcon from "../icons/GoogleIcon";
+import GithubIcon from "../icons/GithubIcon";
 
 interface AuthStatusProps {
   authStatus: AuthStatus;
@@ -84,7 +86,9 @@ const MarketingNavigation = () => (
 );
 
 const AuthActions = ({ authStatus }: AuthStatusProps) => {
-  if (authStatus === AuthStatus.Loading) return <Skeleton />;
+  if (authStatus === AuthStatus.Loading) {
+    return <Skeleton className="w-16 rounded-lg" />;
+  }
 
   if (authStatus === AuthStatus.Authenticated) {
     return (
@@ -97,22 +101,28 @@ const AuthActions = ({ authStatus }: AuthStatusProps) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline">Login</Button>
+        <Button variant="outline" className="w-16">
+          Login
+        </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-42">
+      <DropdownMenuContent
+        align="end"
+        className="w-42"
+        onCloseAutoFocus={(event) => event.preventDefault()}
+      >
         <DropdownMenuItem
           onClick={() =>
-            (window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/auth/google`)
+            (window.location.href = `${process.env.NEXT_PUBLIC_SERVER_URL}/auth/google`)
           }
         >
-         Continue with Google
+          <GoogleIcon /> Continue with Google
         </DropdownMenuItem>
         <DropdownMenuItem
           onClick={() =>
-            (window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/auth/github`)
+            (window.location.href = `${process.env.NEXT_PUBLIC_SERVER_URL}/auth/github`)
           }
         >
-          Continue with GitHub
+          <GithubIcon /> Continue with GitHub
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
@@ -158,19 +168,26 @@ const MobileNavigation = ({ links }: MobileNavigationProps) => {
 };
 
 const ThemeToggleButton = () => {
-  const { theme, setTheme } = useTheme();
-  const isDark = theme === "dark";
+  const { resolvedTheme, setTheme } = useTheme();
+  const mounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  );
+
+  if (!mounted) {
+    return <Skeleton className="size-8 rounded-full" />;
+  }
+
+  const isDark = resolvedTheme === "dark";
+
   return (
     <Button
       variant="outline"
-      className="rounded-full"
+      className="size-8 rounded-full"
       onClick={() => setTheme(isDark ? "light" : "dark")}
     >
-      {isDark ? (
-        <Sun size={23} color="yellow" />
-      ) : (
-        <Moon size={23} color="blue" />
-      )}
+      {isDark ? <Sun color="yellow" /> : <Moon color="blue" />}
     </Button>
   );
 };
