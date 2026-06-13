@@ -107,22 +107,18 @@ const AuthActions = ({ authStatus }: AuthStatusProps) => {
       </DropdownMenuTrigger>
       <DropdownMenuContent
         align="end"
-        className="w-42"
+        className="min-w-31"
         onCloseAutoFocus={(event) => event.preventDefault()}
       >
-        <DropdownMenuItem
-          onClick={() =>
-            (window.location.href = `${process.env.NEXT_PUBLIC_SERVER_URL}/auth/google`)
-          }
-        >
-          <GoogleIcon /> Continue with Google
+        <DropdownMenuItem asChild>
+          <Link href={`${process.env.NEXT_PUBLIC_SERVER_URL}/oauth/google`}>
+            <GoogleIcon /> Google Login
+          </Link>
         </DropdownMenuItem>
-        <DropdownMenuItem
-          onClick={() =>
-            (window.location.href = `${process.env.NEXT_PUBLIC_SERVER_URL}/auth/github`)
-          }
-        >
-          <GithubIcon /> Continue with GitHub
+        <DropdownMenuItem asChild>
+          <Link href={`${process.env.NEXT_PUBLIC_SERVER_URL}/oauth/github`}>
+            <GithubIcon /> GitHub Login
+          </Link>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
