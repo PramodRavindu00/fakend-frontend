@@ -111,12 +111,16 @@ const AuthActions = ({ authStatus }: AuthStatusProps) => {
         onCloseAutoFocus={(event) => event.preventDefault()}
       >
         <DropdownMenuItem asChild>
-          <Link href={`${process.env.NEXT_PUBLIC_SERVER_URL}/oauth/google`}>
+          <Link
+            href={`${process.env.NEXT_PUBLIC_SERVER_URL}/auth/oauth/google`}
+          >
             <GoogleIcon /> Google Login
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
-          <Link href={`${process.env.NEXT_PUBLIC_SERVER_URL}/oauth/github`}>
+          <Link
+            href={`${process.env.NEXT_PUBLIC_SERVER_URL}/auth/oauth/github`}
+          >
             <GithubIcon /> GitHub Login
           </Link>
         </DropdownMenuItem>
