@@ -5,7 +5,7 @@ export const refreshToken = async (): Promise<RefreshTokenResponse> => {
   const { data } = await api.post<RefreshTokenResponse>(
     "/auth/refresh",
     {},
-    { public: true },
+    { public: true, timeout: 10_000 },
   );
   return data;
 };
