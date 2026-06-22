@@ -5,6 +5,7 @@ interface AuthState {
   status: AuthStatus;
   user: CurrentUser | null;
   accessToken: string | null;
+  setAccessToken: (accessToken: string) => void;
   setAuth: (data: { user: CurrentUser; accessToken: string }) => void;
   clearAuth: () => void;
   setLoading: () => void;
@@ -14,6 +15,10 @@ export const useAuthStore = create<AuthState>((set) => ({
   status: AuthStatus.Guest,
   user: null,
   accessToken: null,
+  setAccessToken: (accessToken) =>
+    set({
+      accessToken,
+    }),
   setAuth: ({ user, accessToken }) =>
     set({
       status: AuthStatus.Authenticated,
