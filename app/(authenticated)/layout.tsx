@@ -1,3 +1,4 @@
+import AuthenticatedLayoutGuard from "@/components/AuthenticatedLayoutGuard";
 import AppBar from "@/components/custom/AppBar";
 
 const AuthenticatedLayout = ({
@@ -6,10 +7,10 @@ const AuthenticatedLayout = ({
   children: React.ReactNode;
 }>) => {
   return (
-    <>
+    <AuthenticatedLayoutGuard>
       <AppBar/>
       {children}
-    </>
+    </AuthenticatedLayoutGuard>
   );
 };
 

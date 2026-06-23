@@ -1,7 +1,5 @@
-import {
-  AuthenticatingView,
-  OAuthHandlerView,
-} from "@/components/custom/oauth/OAuthCallbackViews";
+import { AuthenticatingView } from "@/components/custom/oauth/AuthenticatingView";
+import { OAuthHandlerView } from "@/components/custom/oauth/OAuthHandlerView";
 import { Suspense } from "react";
 interface Props {
   searchParams: Promise<{ error?: string; token: string }>;

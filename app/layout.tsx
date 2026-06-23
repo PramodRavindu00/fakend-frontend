@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { AuthProvider } from "@/providers/AuthProvider";
-import { QueryProvider } from "@/providers/QueryClientProvider";
-import AppThemeProvider from "@/providers/ThemeProvider";
+import { AuthProvider } from "@/components/providers/AuthProvider";
+import { QueryProvider } from "@/components/providers/QueryClientProvider";
+import AppThemeProvider from "@/components/providers/ThemeProvider";
 import { cn } from "@/lib/utils";
 
 

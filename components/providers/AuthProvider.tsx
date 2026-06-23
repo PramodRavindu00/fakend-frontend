@@ -15,19 +15,20 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const setLoading = useAuthStore((state) => state.setLoading);
   const clearAuth = useAuthStore((state) => state.clearAuth);
 
+  const authStatus = useAuthStore((s) => s.status);
+  const shouldBootstrapSession =
+    pathname !== OAUTH_CALLBACK_PATH && authStatus !== AuthStatus.Authenticated;
   const sessionQuery = useQuery({
     queryKey: ["session"],
     queryFn: refreshToken,
-    enabled:
-      pathname !== OAUTH_CALLBACK_PATH &&
-      useAuthStore.getState().status !== AuthStatus.Authenticated,
+    enabled: shouldBootstrapSession,
     retry: false,
     staleTime: Infinity,
     refetchOnWindowFocus: false,
   });
 
   useEffect(() => {
-    if (pathname === OAUTH_CALLBACK_PATH) return;
+    if (!shouldBootstrapSession) return;
 
     if (sessionQuery.isPending) {
       setLoading();
@@ -54,6 +55,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setLoading,
     setAuth,
     clearAuth,
+    shouldBootstrapSession,
   ]);
 
   return children;
