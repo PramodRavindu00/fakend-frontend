@@ -13,6 +13,7 @@ import { useAuthStore } from "@/store/auth.store";
 import {
   authenticatedLinks,
   AuthStatus,
+  CurrentUser,
   LinkItem,
   marketingLinks,
 } from "@/lib/constants/constants";
@@ -39,6 +40,7 @@ import GithubIcon from "../icons/GithubIcon";
 
 interface AuthStatusProps {
   authStatus: AuthStatus;
+  user: CurrentUser | null;
 }
 
 interface MobileNavigationProps {
@@ -47,6 +49,7 @@ interface MobileNavigationProps {
 
 const AppBar = () => {
   const authStatus = useAuthStore((state) => state.status);
+  const currentUser = useAuthStore((s) => s.user);
   const mobileLinks: LinkItem[] =
     authStatus === AuthStatus.Authenticated
       ? [...authenticatedLinks]
@@ -65,7 +68,7 @@ const AppBar = () => {
 
       <div className="flex gap-2">
         <ThemeToggleButton />
-        <AuthActions authStatus={authStatus} />
+        <AuthActions authStatus={authStatus} user={currentUser} />
       </div>
     </header>
   );
@@ -85,17 +88,40 @@ const MarketingNavigation = () => (
   </NavigationMenu>
 );
 
-const AuthActions = ({ authStatus }: AuthStatusProps) => {
+const AuthActions = ({ authStatus, user }: AuthStatusProps) => {
+  const fallbackName = user?.name
+    .trim()
+    .split(/\s+/)
+    .slice(0, 2)
+    .map((word) => word[0])
+    .join("");
+
   if (authStatus === AuthStatus.Loading) {
     return <Skeleton className="w-16 rounded-lg" />;
   }
 
   if (authStatus === AuthStatus.Authenticated) {
     return (
-      <Avatar>
-        <AvatarImage src="https://github.com/shadcn.png" />
-        <AvatarFallback>AU</AvatarFallback>
-      </Avatar>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Avatar className="cursor-pointer">
+            <AvatarImage
+              src={user?.avatarUrl ?? undefined}
+              referrerPolicy="no-referrer"
+              alt={user?.name}
+            />
+            <AvatarFallback>{fallbackName}</AvatarFallback>
+          </Avatar>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent
+          align="end"
+          className="min-w-31"
+          onCloseAutoFocus={(event) => event.preventDefault()}
+        >
+          <DropdownMenuItem asChild></DropdownMenuItem>
+          <Button variant="ghost" size="sm">Logout</Button>
+        </DropdownMenuContent>
+      </DropdownMenu>
     );
   }
   return (

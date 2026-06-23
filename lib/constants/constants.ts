@@ -8,7 +8,7 @@ export interface CurrentUser {
   id: string;
   email: string;
   name: string;
-  avatarUrl?: string;
+  avatarUrl: string | null;
 }
 
 export interface RefreshTokenResponse {
@@ -46,3 +46,5 @@ export const authenticatedLinks: LinkItem[] = [
     href: "/dashboard",
   },
 ];
+
+export const OAUTH_CALLBACK_PATH = "/auth/oauth/callback";

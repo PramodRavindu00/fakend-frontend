@@ -5,9 +5,7 @@ import { refreshToken } from "@/services/auth.service";
 import { useAuthStore } from "@/store/auth.store";
 import { useQuery } from "@tanstack/react-query";
 import { usePathname } from "next/navigation";
-import { AuthStatus } from "@/lib/constants/constants";
-
-const OAUTH_CALLBACK_PATH = "/auth/oauth/callback";
+import { AuthStatus, OAUTH_CALLBACK_PATH } from "@/lib/constants/constants";
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const pathname = usePathname();
