@@ -1,11 +1,10 @@
 "use client";
 
-import { useEffect } from "react";
-import { refreshToken } from "@/services/auth.service";
+import { useSessionQuery } from "@/hooks/useSessionQuery";
 import { useAuthStore } from "@/store/auth.store";
-import { useQuery } from "@tanstack/react-query";
-import { redirect, RedirectType, usePathname } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { AuthStatus, OAUTH_CALLBACK_PATH } from "@/lib/constants/constants";
+import { useEffect } from "react";
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const pathname = usePathname();
@@ -16,14 +15,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const authStatus = useAuthStore((s) => s.status);
   const shouldBootstrapSession =
     pathname !== OAUTH_CALLBACK_PATH && authStatus !== AuthStatus.Authenticated;
-  const sessionQuery = useQuery({
-    queryKey: ["session"],
-    queryFn: refreshToken,
-    enabled: shouldBootstrapSession,
-    retry: false,
-    staleTime: Infinity,
-    refetchOnWindowFocus: false,
-  });
+  const sessionQuery = useSessionQuery(shouldBootstrapSession);
 
   useEffect(() => {
     if (!shouldBootstrapSession) return;
@@ -38,7 +30,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         accessToken: sessionQuery.data.accessToken,
         user: sessionQuery.data.user,
       });
-      redirect("/dashboard", RedirectType.replace);
+      return;
     }
 
     if (sessionQuery.isError) {
