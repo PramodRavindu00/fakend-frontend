@@ -4,7 +4,7 @@ import { AuthStatus, CurrentUser } from "@/lib/constants/constants";
 import { completeAuthSession } from "@/services/auth.service";
 import { useAuthStore } from "@/store/auth.store";
 import { useQuery } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
+import { redirect, RedirectType } from "next/navigation";
 import { useEffect } from "react";
 import { AuthenticatingView } from "./AuthenticatingView";
 import { OAuthErrorView } from "./OAuthErrorView";
@@ -19,11 +19,9 @@ export const OAuthTokenHandler = ({
   clearAuth: () => void;
 }) => {
   const authStatus = useAuthStore((s) => s.status);
-  const router = useRouter();
   const oauthQuery = useQuery({
     queryKey: ["oauth-callback", token],
-    enabled:
-      !!token && authStatus !== AuthStatus.Authenticated,
+    enabled: !!token && authStatus !== AuthStatus.Authenticated,
     queryFn: () => completeAuthSession(token),
     retry: false,
     staleTime: Infinity,
@@ -33,7 +31,7 @@ export const OAuthTokenHandler = ({
   useEffect(() => {
     if (oauthQuery.isSuccess && oauthQuery.data) {
       setAuth(oauthQuery.data);
-      router.replace("/dashboard");
+      redirect("/dashboard", RedirectType.replace);
     }
 
     if (oauthQuery.isError) {
@@ -43,15 +41,12 @@ export const OAuthTokenHandler = ({
     oauthQuery.isSuccess,
     oauthQuery.data,
     oauthQuery.isError,
-    router,
     setAuth,
     clearAuth,
   ]);
 
   if (oauthQuery.isError) {
-    return (
-      <OAuthErrorView error="oauth_failed" clearAuth={clearAuth} />
-    );
+    return <OAuthErrorView error="oauth_failed" clearAuth={clearAuth} />;
   }
 
   return <AuthenticatingView />;

@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { refreshToken } from "@/services/auth.service";
 import { useAuthStore } from "@/store/auth.store";
 import { useQuery } from "@tanstack/react-query";
-import { usePathname } from "next/navigation";
+import { redirect, RedirectType, usePathname } from "next/navigation";
 import { AuthStatus, OAUTH_CALLBACK_PATH } from "@/lib/constants/constants";
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
@@ -38,7 +38,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         accessToken: sessionQuery.data.accessToken,
         user: sessionQuery.data.user,
       });
-      return;
+      redirect("/dashboard", RedirectType.replace);
     }
 
     if (sessionQuery.isError) {
