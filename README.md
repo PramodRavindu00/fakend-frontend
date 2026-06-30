@@ -4,6 +4,8 @@ Web application for **Fakend** — a mock API platform built for software teams,
 
 Use the dashboard to manage mock projects and routes, sign in with Google or GitHub, and copy shareable mock API links. Point your app at those URLs to test success paths, error states, and edge cases with predictable JSON and status codes.
 
+> **Project status:** Fakend is still in active development. The UI, dashboard workflows, and docs are evolving. More features will be added over time — expect placeholder pages, incomplete flows, and upcoming enhancements.
+
 ## Technologies
 
 | Layer | Stack |
